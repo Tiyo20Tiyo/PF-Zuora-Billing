@@ -1,0 +1,41 @@
+meta {
+  name: Update Account API v1 copy
+  type: http
+  seq: 4
+}
+
+put {
+  url: https://rest.test.zuora.com/v1/accounts/PF000200
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: 1a5970699e994ab88a071a9cdd343825
+}
+
+body:json {
+  
+  {
+    "paymentGateway": "Worldpay-9876", //Dynamic value seperate value required for each club , (New club Payment Gateway Name)
+    "FranchiseGroupID__c": "G0001", // Franchisee Id (Dynamic, required) 
+    "TransferDate__c":"2026-07-25", //Date of Transfer 
+    "TransferType__c":"Zuora to Zuora", // Determine the Transfer type
+    "taxInfo": {
+      "companyCode": "G0001" // same as Franchise group Id/Franchisee Account number (dynamic,required)
+    },
+    "soldToContact": {       // update the new club address, below (dynamic,required)
+      "firstName": "Corp Club",
+      "lastName": "corporate",
+      "workEmail": "corporatePF@gmail.com",
+      "address1": "109,St.thomas street",
+      "address2": "aasff",
+      "city": "Jersey City",
+      "country": "US",
+      "state": "NJ",
+      "zipCode": "07030",
+      "HomeClubNumber__c": "9876" //update, the member new Home club number ((Dynamic, required)
+      
+    }
+  }
+}
