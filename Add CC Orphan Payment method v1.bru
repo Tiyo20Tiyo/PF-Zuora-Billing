@@ -1,0 +1,43 @@
+meta {
+  name: Add CC Orphan Payment method v1
+  type: http
+  seq: 5
+}
+
+post {
+  url: https://rest.test.zuora.com/v1/payment-methods
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}
+
+auth:bearer {
+  token: 10d4af9977cc4252baca11a17edeb486
+}
+
+body:json {
+  {
+    //      "accountKey": "844-7XY5LN7",
+    "type": "CreditCard", // (Fix value). as its only for saving Creditcard in Zuora
+    "cardType": "Visa", //(Dynamic value)
+    "cardNumber": "6011010100000002 ", //(Dynamic value)  Failed
+    "cardNumber": "4111111111111111", //success card
+    "expirationMonth": 7, //(Dynamic value) 
+    "expirationYear": 2026, //(Dynamic value)
+    "securityCode": "0421", //(CVV code)
+    "cardHolderInfo": { // Customer Name and Address - Billing address
+      "cardHolderName": "CC Holder", //(Dynamic value)
+      "addressLine1": "Line 1 CC",
+      "addressLine2": "Line 2",
+      "city": "Amesbury",
+      "country": "US",
+      //         "email": "",
+      //         "state": "NH",
+      "zipCode": "03038"
+    }
+    ,"authGateway":"8a8aa1779c50e677019c56c1fbc93dfb"  // dynamic, Refer https://planetfitness.atlassian.net/wiki/spaces/PC1/pages/4455366812/Zuora+API+Starter+Guide+for+Planet+Fitness+Integration#How-to-get-Payment-Gateway-Id-%3A
+  }
+}

@@ -1,0 +1,52 @@
+meta {
+  name: For Existing member -Update Account API
+  type: http
+  seq: 2
+}
+
+put {
+  url: https://rest.test.zuora.com/v1/accounts/PF000176
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: 10d4af9977cc4252baca11a17edeb486
+}
+
+body:json {
+  
+  {
+    "billCycleDay": 17,  // Day when monthly billing should start
+    "defaultPaymentMethodId":"8a8aa3c19c5a1be1019c6a2056451f57", // update the new recurring payment method id (ACH) to make it as Default payment method 
+    "paymentGateway": "Worldpay - 9876", //Dynamic value seperate value required for each club
+    "FranchiseGroupID__c": "G0001", // Franchisee Id (Dynamic, required) 
+    "JoinDate__c": "2026-02-10", // same as Transfer Date (Dynamic, required) ,
+    "TransferDate__c":"2026-02-10", //Date of Transfer 
+    "TransferType__c":"ABC to Zuora" // Determine the Transfer type
+    ,
+    //Not required untile we onboard new club
+    "taxInfo": {
+      "companyCode": "G0001" // same as Franchise group Id/Franchisee Account number (dynamic,required)
+    },
+    "billToContact": {
+      "firstName": "Oliver", // update , in case member wants to change first name (Dynamic, optional)  
+      "lastName": "Peter", // update , in case member wants to change last name (Dynamic, optional)
+      "workEmail": "oliverpeter@gmail.com" // update email address of member (dynamic, optional)
+    },
+    //Note: new club is currently not supported we will provide 
+    "soldToContact": {       // update the new club address, below , if the member rejoin in a new club (dynamic,required)
+      "firstName": "New F ClubName",
+      "lastName": "New F ClubName",
+      "workEmail": "axyPF@gmail.com",
+      "address1": "asf",
+      "address2": "aasff",
+      "city": "asf",
+      "country": "US",
+      "state": "NY",
+      "zipCode": "07314",
+      "HomeClubNumber__c": "9876" //update, the member new Home club number ((Dynamic, required)
+      
+    }
+  }
+}

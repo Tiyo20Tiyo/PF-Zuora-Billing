@@ -1,0 +1,28 @@
+meta {
+  name: Get Token PF Dev
+  type: http
+  seq: 4
+}
+
+post {
+  url: https://rest.test.zuora.com/oauth/token
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  client_id: 48ab475c-9de1-48ed-8cfc-01c32d30bf22
+  client_secret: ADavgin8UQbn7+fEHGkPvzbrgXc8u=s=ESPxXUmT
+  grant_type: client_credentials
+}
+
+tests {
+  // Extract the access token from the response and save it as a variable
+  var accessToken = res.getBody().access_token;
+  
+  
+  // Save the access token to collection
+  bru.setVar("token",accessToken);
+  
+  
+}

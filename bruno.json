@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Zuora Billing API - (ABC to Zuora Transfer)",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

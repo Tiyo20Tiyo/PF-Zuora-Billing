@@ -1,0 +1,115 @@
+meta {
+  name: For Nonexisting member - Create order v1
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://rest.test.zuora.com/v1/orders
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}
+
+auth:bearer {
+  token: fbd939e9f6b9496682317c923c1821db
+}
+
+body:json {
+  {
+    "processingOptions": {
+    
+      "electronicPaymentOptions": {
+        "paymentMethodId": "8a8aa2029c5a1bdc019c69b8cc8c4912" // Backup payment method id (eg. CreditCard) received from previous payment method creation call.  this will be used for immediate payment
+      },
+      "runBilling": false, // false value will not generate any invoice (Fix value)
+      "collectPayment": false // false value will not trigger any payment. (Fix value)
+    },
+    "newAccount": { // Account attributes to create new member in Zuora
+      "name": "Emma Watson", // (Dynamic value)
+      "accountNumber": "PF000175", // Member Number ( PFX to generate and pass)
+      "billCycleDay": "0", //(Dynamic) will be auto populated based on 1st bill date in Zuora which is 17
+      "batch": "Batch10", //Default value to pass for pilot
+      "paymentGateway": "Worldpay-5251", //Dynamic value seperate value required for each club - Worldpay-club#(4digit)
+      "taxInfo": {
+        "companyCode": "G0001" // same as Franchise group Id/Franchisee Account number (dynamic,required)
+      },
+      "customFields": {
+        "JoinDate__c": "2025-09-05", //Same as Transfer Date is required
+        "AccountType__c": "Member", //AccountType is required
+        "MinorFlag__c": "No",
+        "FranchiseGroupID__c": "G0001", // Franchisee Id (Dynamic, required) 
+        "TransferDate__c": "2025-09-05", //Date of Transfer 
+        "TransferType__c": "ABC to Zuora" // Determine the Transfer type
+      },
+      "billToContact": { // Member Address
+        "firstName": "Planet 04",
+        "lastName": "Fitness",
+        "address1": "234 Shore",
+        "address2": "Dr SW",
+        "city": "Edwardsville,",
+        "state": "Illinois",
+        "country": "United States",
+        "workEmail": "contact@planetfitness.com",
+        "postalCode": ""
+      },
+      "soldToContact": { // Home Club Address
+        "firstName": "Club Name",
+        "lastName": "Club Name",
+        "address1": "234 Shore",
+        "address2": "Dr SW",
+        "city": "Edwardsville,",
+        "state": "Illinois", // Required
+        "country": "United States", //Required
+        "workEmail": "contact@planetfitness.com",
+        "postalCode": "", // Required
+        "HomeClubNumber__c": "5251" // Home club Number required
+      },
+      "currency": "USD", //
+      "autoPay": true, //future payments are to be automatically billed when they are due. 
+      "hpmCreditCardPaymentMethodId": "8a8aa3c19c5a1be1019c69b8fc59454d" // Recurring payment method id (eg. ACH) for recurring payments
+    },
+    "orderDate": "2025-09-05", // The date when the member Transfer from ABC to Zuora  (Dynamic value)
+    "subscriptions": [
+      {
+        "customFields": {
+          "CCMOfferCode__c": "ABHTG" // Actual Offer code from CCM
+        },
+        "orderActions": [
+          {
+            "triggerDates": [
+              {
+                "name": "ServiceActivation", //billing start date for annual charge (Fix value)
+                "triggerDate": "2026-05-01" //(Dynamic value) (date when the Annual billing should start) 
+              },
+              {
+                "name": "ContractEffective", //(fix value)
+                "triggerDate": "2025-09-17" //(Dynamic value) the date when the Monthly billing should start
+              }
+            ],
+            "type": "CreateSubscription", // this value will initiate subscription creation process in Zuora (Fix value)
+            "createSubscription": {
+              "terms": {
+                "initialTerm": {
+                  "termType": "EVERGREEN" // Member subscription with open ended contract (Fix value for pilot)
+                }
+              },
+              "subscribeToRatePlans": [  
+              //Enrollment fee excluded
+                {
+                  "productRatePlanId": "fee1d0c858f9818065881bfbb2350121" //monthly fee
+                },
+                {
+                  "productRatePlanId": "fee1f77460a9818065881bfbb8b60493" //annual fee
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

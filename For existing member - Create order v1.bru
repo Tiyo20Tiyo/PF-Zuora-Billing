@@ -1,0 +1,76 @@
+meta {
+  name: For existing member - Create order v1
+  type: http
+  seq: 1
+}
+
+post {
+  url: https://rest.test.zuora.com/v1/orders
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}
+
+auth:bearer {
+  token: 10d4af9977cc4252baca11a17edeb486
+}
+
+body:json {
+  {
+      "existingAccountNumber": "PF000176", // existing Member/Account Number 
+  
+  
+    "processingOptions": {
+      "electronicPaymentOptions": {
+        "paymentMethodId": "8a8aa1b79c59f9ac019c6a20424c48e4" // Backup payment method id (eg CC) received from previous payment method creation call.   
+      },
+      "runBilling": false, // false value, to not generate an immediate invoice (Fix value)
+      "collectPayment": false // false value, to not collect payments. (Fix value)
+    },
+    
+    "orderDate": "2026-02-10", // The date when the member Transfer from ABC to Zuora  (Dynamic value)
+    "subscriptions": [
+      {
+        "customFields": {
+          "CCMOfferCode__c": "ABHTG" // Actual Offer code from CCM
+        },
+        "orderActions": [
+          {
+            "triggerDates": [
+              {
+                "name": "ServiceActivation", //billing start date for annual charge (Fix value)
+                "triggerDate": "2026-09-15" // (Dynamic value) (date when the Annual billing should start) 
+              },
+              {
+                "name": "ContractEffective", 
+                "triggerDate": "2026-02-17" //(Dynamic value) the date when the Monthly billing should start
+              }
+            ],
+            "type": "CreateSubscription", // this value will initiate subscription creation process in Zuora (Dynamic value)
+            "createSubscription": {
+              "terms": {
+                "initialTerm": {
+                  "termType": "EVERGREEN" // Member subscription with open ended contract (Fix value for pilot)
+                }
+              },
+              "subscribeToRatePlans": [
+                              //Enrollment fee excluded
+   
+                {
+                  "productRatePlanId": "fee1d0c858f9818065881bfbb2350121" //monthly fee
+                },
+                {
+                  "productRatePlanId": "fee1f77460a9818065881bfbb8b60493" //annual fee
+                }
+                
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+meta {
+  name: Add ACH Orphan Payment method v1
+  type: http
+  seq: 6
+}
+
+post {
+  url: https://rest.test.zuora.com/v1/payment-methods
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}
+
+auth:bearer {
+  token: 10d4af9977cc4252baca11a17edeb486
+}
+
+body:json {
+  {
+    //  "accountKey":"265-AB12PFA6",
+        "type": "ACH", // (Fix value). as its only for saving ACH in Zuora
+   // "bankAccountNumber": "3099999999",// Error
+      "bankAccountNumber": "1099999999",// Success
+      "bankAccountName": "Planet Fitness",
+      "bankABACode": "011075150",
+  //  "bankABACode":"053133052", // Error
+      "bankAccountType": "Checking",
+      "bankName": "American Succes",
+      "addressLine1":"Line 1",
+      "addressLine2":" line 2",
+      "city":"city",
+      "country":"USA",
+      "email":"test234@gmail.com",
+      "state":"NY",
+      "zipCode":"34522",
+      "phone":"133456989"
+    ,"authGateway":"8a8aa1779c50e677019c56c1fbc93dfb"  // dynamic, Refer https://planetfitness.atlassian.net/wiki/spaces/PC1/pages/4455366812/Zuora+API+Starter+Guide+for+Planet+Fitness+Integration#How-to-get-Payment-Gateway-Id-%3A
+  }
+}
